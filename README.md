@@ -8,25 +8,23 @@ A two-file C program that trains a degree-8 polynomial to approximate a noisy si
 
 ## Table of Contents
 
-1. [What It Does](https://claude.ai/chat/f5738b45-9406-4cf9-babd-02627a3f483a#what-it-does)
-2. [Architecture Overview](https://claude.ai/chat/f5738b45-9406-4cf9-babd-02627a3f483a#architecture-overview)
-3. [Prerequisites & Build](https://claude.ai/chat/f5738b45-9406-4cf9-babd-02627a3f483a#prerequisites--build)
-4. [Data Format](https://claude.ai/chat/f5738b45-9406-4cf9-babd-02627a3f483a#data-format)
-5. [Hyperparameters](https://claude.ai/chat/f5738b45-9406-4cf9-babd-02627a3f483a#hyperparameters)
-6. [Section-by-Section Breakdown](https://claude.ai/chat/f5738b45-9406-4cf9-babd-02627a3f483a#section-by-section-breakdown)
-    - [Section 1 — Headers, Macros & Shared Memory](https://claude.ai/chat/f5738b45-9406-4cf9-babd-02627a3f483a#section-1--headers-macros--shared-memory)
-    - [Section 2 — Data Loader](https://claude.ai/chat/f5738b45-9406-4cf9-babd-02627a3f483a#section-2--data-loader)
-    - [Section 3 — The Runtime Code Patcher](https://claude.ai/chat/f5738b45-9406-4cf9-babd-02627a3f483a#section-3--the-runtime-code-patcher)
-    - [Section 4 — Worker Children](https://claude.ai/chat/f5738b45-9406-4cf9-babd-02627a3f483a#section-4--worker-children)
-    - [Section 5 — Scheduler Child](https://claude.ai/chat/f5738b45-9406-4cf9-babd-02627a3f483a#section-5--scheduler-child)
-    - [Section 6 — `main`](https://claude.ai/chat/f5738b45-9406-4cf9-babd-02627a3f483a#section-6--main)
-7. [Process Topology](https://claude.ai/chat/f5738b45-9406-4cf9-babd-02627a3f483a#process-topology)
-8. [The Patching Trick in Detail](https://claude.ai/chat/f5738b45-9406-4cf9-babd-02627a3f483a#the-patching-trick-in-detail)
-9. [Scheduler Logic](https://claude.ai/chat/f5738b45-9406-4cf9-babd-02627a3f483a#scheduler-logic)
-10. [Known Quirks & Limitations](https://claude.ai/chat/f5738b45-9406-4cf9-babd-02627a3f483a#known-quirks--limitations)
-11. [Debugging](https://claude.ai/chat/f5738b45-9406-4cf9-babd-02627a3f483a#debugging)
-12. [License](https://claude.ai/chat/f5738b45-9406-4cf9-babd-02627a3f483a#license)
-
+1. [What It Does]
+2. [Architecture Overview]
+4. [Data Format]
+5. [Hyperparameters]
+6. [Section-by-Section Breakdown]
+    - [Section 1 — Headers, Macros & Shared Memory]
+    - [Section 2 — Data Loader]
+    - [Section 3 — The Runtime Code Patcher]
+    - [Section 4 — Worker Children]
+    - [Section 5 — Scheduler Child]
+    - [Section 6 — `main`]
+7. [Process Topology]
+8. [The Patching Trick in Detail]
+9. [Scheduler Logic]
+10. [Known Quirks & Limitations]
+11. [Debugging]
+12. [License]
 ---
 
 ## What It Does
@@ -91,7 +89,7 @@ Then run:
 ./train
 ```
 
-The program expects `data.bin` in the working directory (see [Data Format](https://claude.ai/chat/f5738b45-9406-4cf9-babd-02627a3f483a#data-format)).
+The program expects `data.bin` in the working directory.
 
 ---
 
@@ -174,7 +172,7 @@ Feature scaling (÷ π) is applied in-place after loading.
 
 ### Section 3 — The Runtime Code Patcher
 
-This is the star of the show. See [The Patching Trick in Detail](https://claude.ai/chat/f5738b45-9406-4cf9-babd-02627a3f483a#the-patching-trick-in-detail) for the full walkthrough.
+This is the star of the show. 
 
 In brief: `get_alpha()` does not read alpha from a variable. It executes an `x86-64` `movabsq` instruction whose 64-bit immediate operand _is_ the learning rate, encoded as a raw IEEE 754 double baked into the instruction stream. The `patch()` function finds that immediate by scanning `.text` for the two sentinel values flanking it, then overwrites the 8 bytes in place.
 
